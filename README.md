@@ -1,0 +1,2 @@
+# EmployeeManagementSystem
+使用SSM框架搭建的一个简单的员工信息管理系统，实现了基本的增删改查整个流程
