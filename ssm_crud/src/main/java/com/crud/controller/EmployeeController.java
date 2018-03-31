@@ -83,13 +83,14 @@ public class EmployeeController {
 	 * @param empName
 	 * @return
 	 */
-	@RequestMapping("/checkuser")
+	@RequestMapping(value="/checkuser",method=RequestMethod.POST)
 	@ResponseBody
 	public Msg checkuser(@RequestParam("empName")String empName) {
 		//判断用户名是否符合正则表达式
 		
 		String regex = "(^[A-Za-z0-9]{6,16}$)|(^[\\u2E80-\\u9FFF]{2,5}$)";
 		if(!empName.matches(regex)) {
+			//System.out.println(empName.matches(regex));
 			return Msg.fail().add("va_msg", "名字必须是2-5个中文或者6-16位英文数字组合");
 		}
 		

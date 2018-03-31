@@ -2,12 +2,10 @@
 <!DOCTYPE generatorConfiguration
   PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
   "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
-
 <generatorConfiguration>
 	<!-- 不需要 -->
 	<!-- <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" 
 		/> -->
-
 	<context id="DB2Tables" targetRuntime="MyBatis3">
 		<!-- 配置 suppressAllComments 为true表示生成的文件不包含注释 -->
 		<commentGenerator>
@@ -18,7 +16,6 @@
 			userId="root"
 			password="123456">
 		</jdbcConnection>
-
 		<javaTypeResolver>
 			<property name="forceBigDecimals" value="false" />
 		</javaTypeResolver>

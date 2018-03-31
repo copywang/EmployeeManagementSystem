@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Email;
 
 public class Employee {
     private Integer empId;
-    @Pattern(regexp="(^[A-Za-z0-9]{6,16}$)|(^[\\\\u2E80-\\\\u9FFF]{2,5}$)"
+    @Pattern(regexp="(^[A-Za-z0-9]{6,16}$)|(^[\\u2E80-\\u9FFF]{2,5}$)"
     		,message="名字必须是2-5个中文或者6-16位英文数字组合")
     private String empName;
 

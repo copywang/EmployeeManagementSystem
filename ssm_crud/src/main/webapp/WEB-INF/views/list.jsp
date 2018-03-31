@@ -31,7 +31,7 @@
 		<!-- 标题 -->
 		<div class="row">
 			<div class="col-md-12">
-				<h1>SSM-CRUD</h1>
+				<h1>员工信息管理系统</h1>
 			</div>
 		</div>
 		<!-- 新增 删除 按钮 -->

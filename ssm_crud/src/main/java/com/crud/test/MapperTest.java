@@ -29,7 +29,6 @@ public class MapperTest {
 	private EmployeeMapper emp;
 	@Autowired
 	SqlSession sqlSession;
-	
 	/**
 	 * 测试DepartmentMapper.xml
 	 */
@@ -42,7 +41,7 @@ public class MapperTest {
 		//2. 生成一个员工数据
 		//emp.insertSelective(new Employee(null,"jack","M","jack@126.com",1));
 		//3. 批量插入员工，使用可以执行批量操作的sqlSession操作
-		/*
+/*
 		EmployeeMapper mapper = sqlSession.getMapper(EmployeeMapper.class);
 		for(int i = 0;i<1000;i++) {
 			String name = UUID.randomUUID().toString().substring(0, 5) + i;

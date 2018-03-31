@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>员工管理系统</title>
 <!-- Bootstrap -->
 <link href="static/bootstrap-3.3.7-dist/css/bootstrap.min.css"
@@ -20,6 +20,10 @@
 	比如(http://localhost:3360):需要加上项目名
 	http://localhost:3306/crud
  -->
+ <!-- 增加登录功能 -->
+ <!-- 设置访问人数 -->
+
+ 
 <!-- Bootstrap -->
 <link
 	href="${APP_PATH}/static/bootstrap-3.3.7-dist/css/bootstrap.min.css"
@@ -328,6 +332,7 @@
 			totalRecord = result.extend.pageInfo.total;
 			currentPage = result.extend.pageInfo.pageNum;
 		}
+		
 		//新增按钮
 		$("#emp_add_modal_btn").click(function() {
 			//清除表单数据和样式
@@ -391,47 +396,36 @@
 				});
 
 		//保存新增员工信息
-		$("#emp_save_btn")
-				.click(
-						function() {
+		$("#emp_save_btn").click(function() {
 							if ($("#emp_save_btn").attr("ajax-va") == "error") {
 								return false;
-							} /*else if (!validate_add_form()) {
-																return false;
-															}*/
+							} 
+							else if (!validate_add_form()) {
+								return false;
+							}
 							else {
 								//模态框中填写的表单数据提交给服务器进行保存
 								//alert($("#empAddModal form").serialize());
-
-								$
-										.ajax({
-											url : "${APP_PATH}/emp",
-											type : "POST",
-											data : $("#empAddModal form")
-													.serialize(),
-											success : function(result) {
-												if (result.code == 100) {
-													//保存成功
-													//alert(result.msg);
-													//关闭模态框
-													$("#empAddModal").modal(
-															"hide");
-													//到最后一页，发送ajax请求即可
-													to_page(totalRecord);
-												} else {
-													//{"code":200,"msg":"处理失败","extend":{"errorFields":{"empName":"名字必须是2-5个中文或者6-16位英文数字组合"}}}
-													if (result.extend.errorFields.email != undefined) {
-														//显示邮箱错误信息
-														show_validate_msg(
-																"#empName_add_input",
-																"error",
-																result.extend.errorFields.email);
-													} else if (result.extend.errorFields.empName != undefined) {
+								$.ajax({
+										url : "${APP_PATH}/emp",
+										type : "POST",
+										data : $("#empAddModal form").serialize(),
+										success : function(result) {
+										if (result.code == 100) {
+										//保存成功
+										//alert(result.msg);
+										//关闭模态框
+										$("#empAddModal").modal("hide");
+										//到最后一页，发送ajax请求即可
+											to_page(totalRecord);
+										} else {
+											//{"code":200,"msg":"处理失败","extend":{"errorFields":{"empName":"名字必须是2-5个中文或者6-16位英文数字组合"}}}
+											if (result.extend.errorFields.email != undefined) {
+											//显示邮箱错误信息
+												show_validate_msg("#empName_add_input","error",result.extend.errorFields.email);
+											} else if (result.extend.errorFields.empName != undefined) {
 														//显示员工名字错误信息
-														show_validate_msg(
-																"#empName_add_input",
-																"error",
-																result.extend.errorFields.empName);
+														show_validate_msg("#empName_add_input","error",result.extend.errorFields.empName);
 													}
 												}
 											}
@@ -607,7 +601,7 @@
 					type:"DELETE",
 					success:function(result){
 						alert(result.msg);
-						//to_page(currentPage);
+						to_page(currentPage);
 					}
 				});
 			}

@@ -69,7 +69,7 @@ public class EmployeeService {
 	public void deleteBatchEmp(List<Integer> ids) {
 		EmployeeExample example = new EmployeeExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andEmpIdNotIn(ids);
+		criteria.andEmpIdIn(ids);
 		//delete from xxx where emp_id in (1,2,3);
 		employeeMapper.deleteByExample(example);
 	}
