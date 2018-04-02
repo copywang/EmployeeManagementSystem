@@ -174,4 +174,19 @@ public class EmployeeController {
 		}
 		return Msg.success();
 	}
+	@RequestMapping("/emp/query")
+	public String toQueryPage() {
+		return "query";
+	}
+	/**
+	 * 查询功能的查询员工信息
+	 * 查询出来的员工数据显示在一页上面
+	 */
+	@RequestMapping(value="/queryEmps",method=RequestMethod.POST)
+	@ResponseBody
+	public Msg queryEmp(Employee employee) {
+		System.out.println(employee);
+		List<Employee> emplist = employeeService.queryEmp(employee);
+		return Msg.success().add("emplist",emplist);
+	}
 }

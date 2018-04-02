@@ -73,4 +73,20 @@ public class EmployeeService {
 		//delete from xxx where emp_id in (1,2,3);
 		employeeMapper.deleteByExample(example);
 	}
+	public List<Employee> queryEmp(Employee employee) {
+		// TODO Auto-generated method stub
+		EmployeeExample example = new EmployeeExample();
+		Criteria criteria = example.createCriteria();
+		System.out.println("".equals(employee.getEmpName()));
+		if (!("".equals(employee.getEmpName()))) {
+			criteria.andEmpNameEqualTo(employee.getEmpName());
+		}
+		if(!("".equals(employee.getEmail()))) {
+			criteria.andEmailEqualTo(employee.getEmail());
+		}
+		criteria.andGenderEqualTo(employee.getGender());
+		criteria.andDIdEqualTo(employee.getdId());
+		
+		return employeeMapper.selectByExampleWithDept(example);
+	}
 }

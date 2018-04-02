@@ -163,10 +163,15 @@
 		<!-- 新增 删除 按钮 -->
 		<div class="row">
 			<div class="col-md-4 col-md-offset-8">
+				
 				<button type="button" class="btn btn-primary" id="emp_add_modal_btn">新增</button>
 				<button type="button" class="btn btn-danger" id="emp_delete_all_btn">删除</button>
+				<!-- 增加一个高级搜索的按钮 -->
+				<!-- 跳转到高级搜索的界面query.jsp -->
+				<button type="button" class="btn btn-info" id="emp_query_btn">高级搜索</button>
 			</div>
 		</div>
+		
 		<!-- 显示表格数据 -->
 		<div class="row">
 			<div class="col-md-12">
@@ -605,6 +610,12 @@
 					}
 				});
 			}
+		});
+		
+		//定义一个高级搜索按钮的跳转事件
+		
+		$("#emp_query_btn").click(function(){
+			window.location.href = "${APP_PATH}/emp/query/";
 		});
 	</script>
 </body>
