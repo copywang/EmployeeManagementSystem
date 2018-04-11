@@ -73,6 +73,11 @@ public class EmployeeService {
 		//delete from xxx where emp_id in (1,2,3);
 		employeeMapper.deleteByExample(example);
 	}
+	/**
+	 * 高级搜索功能
+	 * @param employee
+	 * @return
+	 */
 	public List<Employee> queryEmp(Employee employee) {
 		// TODO Auto-generated method stub
 		EmployeeExample example = new EmployeeExample();

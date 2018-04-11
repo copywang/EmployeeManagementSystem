@@ -91,22 +91,25 @@
 				<table class="table table-striped" id="emps_table">
 					<thead>
 						<tr>
-							<th>
-								<input type="checkbox" id="check-all"/>
-							</th>
 							<th>ID</th>
 							<th>员工姓名</th>
 							<th>性别</th>
 							<th>电子邮箱</th>
 							<th>部门</th>
-							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
-
+						<!-- 用于显示查询出来的员工信息 -->
 					</tbody>
 				</table>
 			</div>
+		</div>
+		<!-- 显示分页信息 -->
+		<div class="row">
+			<!-- 分页文字信息 -->
+			<div class="col-md-6" id="page_info_area"></div>
+			<!-- 分页条信息 -->
+			<div class="col-md-6" id="page_nav_area"></div>
 		</div>
 	</div>
 	
@@ -145,20 +148,41 @@
 				type:"POST",
 				data:$("#query_area").serialize(),
 				success:function(result){
-					//{"code":100,"msg":"处理成功","extend":{"emplist":[{"empId":7,"empName":"f7fa94","gender":"M","email":"f7fa94@126.com","dId":1,"department":{"deptId":1,"deptName":"开发部"}}]}}
+					//1. 显示员工信息
 					build_emps_table(result);
+					//2. 显示分页信息
+					build_page_info(result);
+					//3. 显示分页条
+					build_page_nav(result);
 				}
 			});
 			
 		});
 		
+		function to_page(pn) {
+			$.ajax({
+				url : "${APP_PATH}/queryEmps",
+				data : "pn="+pn+"&"+$("#query_area").serialize(),
+				type : "POST",
+				success : function(result) {
+					//console.log(result);
+					//1. 解析JSON 显示员工数据
+					build_emps_table(result);
+					//2. 显示分页信息
+					build_page_info(result);
+					//3. 显示分页条
+					build_page_nav(result);
+				}
+			});
+		}
+		
 		function build_emps_table(result) {
-			var emps = result.extend.emplist;
+			var emps = result.extend.pageInfo.list;
 			//清空table表格
 			$("#emps_table tbody").empty();
 			$.each(emps, function(index, item) {
 				//alert(item.empName);
-				var checkBoxTd = $("<td><input type='checkbox' class='check_item'></input></td>");
+				
 				var empIdTd = $("<td></td>").append(item.empId);
 				var empNameTd = $("<td></td>").append(item.empName);
 				var genderTd = $("<td></td>").append(
@@ -166,31 +190,83 @@
 				var EmailTd = $("<td></td>").append(item.email);
 				var deptNameTd = $("<td></td>")
 						.append(item.department.deptName);
-				/**
-				<button type="button" class="btn btn-primary btn-sm">
-					修改 <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-				</button>
-				<button type="button" class="btn btn-danger btn-sm">
-					删除 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-				</button>
-				 */
-				var editbtn = $("<button></button>").addClass(
-						"btn btn-primary btn-sm edit_btn").append(
-						$("<span></span>").addClass(
-								"glyphicon glyphicon-pencil")).append("编辑");
-				editbtn.attr("edit-id", item.empId);
-				var delbtn = $("<button></button>").addClass(
-						"btn btn-danger btn-sm delete_btn").append(
-						$("<span></span>").addClass(
-								"glyphicon glyphicon-remove")).append("删除");
-				delbtn.attr("delete-id", item.empId);
-				var btntd = $("<td></td>").append(editbtn).append(" ").append(
-						delbtn)
-				$("<tr></tr>").append(checkBoxTd).append(empIdTd).append(empNameTd).append(
-						genderTd).append(EmailTd).append(deptNameTd).append(
-						btntd).appendTo("#emps_table tbody");
+			
+				$("<tr></tr>").append(empIdTd).append(empNameTd).append(
+						genderTd).append(EmailTd).append(deptNameTd).appendTo("#emps_table tbody");
 			});
 		}
+		
+		//分页条
+		function build_page_nav(result) {
+			//page_nav_area
+			$("#page_nav_area").empty();
+
+			var ul = $("<ul></ul>").addClass("pagination");
+			var firstPageLi = $("<li></li>").append(
+					$("<a></a>").append("首页").attr("href", "#"));
+			var prePageLi = $("<li></li>").append(
+					$("<a></a>").append("&laquo;").attr("href", "#"));
+			if (result.extend.pageInfo.hasPreviousPage == false) {
+				firstPageLi.addClass("disabled");
+				prePageLi.addClass("disabled");
+			} else {
+				//添加翻页事件
+				firstPageLi.click(function() {
+					to_page(1);
+				});
+				prePageLi.click(function() {
+					to_page(result.extend.pageInfo.pageNum - 1);
+				});
+			}
+
+			var nextPageLi = $("<li></li>").append(
+					$("<a></a>").append("&raquo;").attr("href", "#"));
+			var lastPageLi = $("<li></li>").append(
+					$("<a></a>").append("末页").attr("href", "#"));
+			if (result.extend.pageInfo.hasNextPage == false) {
+				nextPageLi.addClass("disabled");
+				lastPageLi.addClass("disabled");
+			} else {
+				//添加翻页事件
+				lastPageLi.click(function() {
+					to_page(result.extend.pageInfo.pages);
+				});
+				nextPageLi.click(function() {
+					to_page(result.extend.pageInfo.pageNum + 1);
+				});
+			}
+
+			ul.append(firstPageLi).append(prePageLi);
+			var navNum = result.extend.pageInfo.navigatepageNums;
+			$.each(navNum, function(index, item) {
+				var pageLi = $("<li></li>").append(
+						$("<a></a>").append(item).attr("href", "#"));
+				if (result.extend.pageInfo.pageNum == item) {
+					pageLi.addClass("active");
+				}
+				//绑定单击事件
+				pageLi.click(function() {
+					to_page(item);
+				})
+				ul.append(pageLi);
+			});
+			ul.append(nextPageLi).append(lastPageLi);
+			var navEle = $("<nav></nav>").append(ul);
+			$("#page_nav_area").append(navEle);
+		}
+		//分页信息
+		function build_page_info(result) {
+
+			$("#page_info_area").empty();
+
+			$("#page_info_area").append(
+					"当前第 " + result.extend.pageInfo.pageNum + " 页" + " 总 "
+							+ result.extend.pageInfo.pages + " 页" + " 总 "
+							+ result.extend.pageInfo.total + " 条记录");
+			totalRecord = result.extend.pageInfo.total;
+			currentPage = result.extend.pageInfo.pageNum;
+		}
+		
 	</script>
 </body>
 </html>
