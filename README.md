@@ -1,3 +1,7 @@
+# EmployeeManagementSystem-ENGlISH
+This is MVC architechure based employee management system. It works on any of the operating system. 
+Magange your employee data with this system. It is easy, fast and user friendy system. 
+
 # EmployeeManagementSystem
 这是完整使用SSM框架开发的第一个项目，项目来源于北京动力节点的SSM框架整合教程，其中加入了一些自己的理解，增加了一个搜索功能的页面，这个项目总体来说对于新手是很友好的，涉及到了简单的ajax和jquery处理，UI搭建，后端SSM环境搭建，简单的业务流程设计（使用JSON交互）
 
